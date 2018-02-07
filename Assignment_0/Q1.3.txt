@@ -1,0 +1,45 @@
+a. imshow(sort(A(:)))
+
+b. histogram(A,32)
+
+c. size_A=size(A);
+   row=size_A(1)
+   col=size_A(2)
+   new_red=zeros(row,col)+255
+   A(:,:,1)=new_red
+   imshow(A)
+
+d. X=imshow(A(1:(row/2),(1:(col/2)),:))
+
+e. ave=mean(A(:));
+   A=A-ave;
+   imshow(A)
+
+f. 
+
+function die_number=dice()
+    die_number=randi([1 6]);
+end
+
+
+g. y=reshape(y,2,3)
+
+h. 
+
+the_max=max(A(:)) ;
+size_A=size(A);
+row=size_A(1)
+col=size_A(2)
+coordinate=find(A==the_max)
+
+for i =1:length(coordinate) % since we can have multiple locations of the max value
+	
+	r=rem(i,row);
+	c=ceil(i/row);
+
+end
+
+i.
+coordinate=find(m==8);
+x=length(coordinate);
+

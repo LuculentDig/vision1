@@ -1,0 +1,13 @@
+a. x = randperm(5588); is a random permutation of all integers from 1 to 5588 in a vector
+b. a = [1:2:50; 51:2:100]; is creating a 2x25 matrix with the first row having every other number from 1-50 and the second row 51-100
+   b = a(2,:); making b the second row of a
+
+c. f = randn(500,1); is a 500x1 vetor contains numbers from a standard normal distribution. The numbers have a mean of 0 and and standard deviation of 1
+   g = f(find(f>0)); set g equals to the subset of f, whether f is a vector or matrix
+
+d. x = zeros(1,100)+0.25; first creates a 1x100 zero matrix, then add 0.25 to each element. 
+   y = 0.5.*ones(1,length(x)); create a y matrix of size 1x100 with every element=1. Then times each element to 0.25
+   z = x + y; Add up the two matrixes together. 
+
+e.  a = [1:300]; create a 1x300 vector of integers from 1-300
+	b = a([end:-1:1]); reverse a
