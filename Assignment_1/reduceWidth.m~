@@ -46,9 +46,10 @@ function [output] = reduceWidth(im, numPixels)
     end
     %disp(seam)
     output = 0;
-    %imshow(im);
-    %hold on;
+    imshow(im);
+    hold on;
     disp(seam)
-    plot(seam(:,1),seam(:,2),'ks')
+    [x,]
+
     
 end
