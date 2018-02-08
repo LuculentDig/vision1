@@ -1,4 +1,4 @@
 function [output] = reduceHeight(im, numPixels)
-    output=imread(im)
-
+    im=rot270(im);
+    reduceWidth(im,numPixels);
 end

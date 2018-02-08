@@ -1,4 +1,5 @@
 function [output] = reduceWidth(im, numPixels)
+    output=[];
     im_gray=rgb2gray(im);
     energy=energyfunc(im_gray);
     
@@ -38,17 +39,25 @@ function [output] = reduceWidth(im, numPixels)
             next_y=next_y+I-2;
         else
             [value,I]=min([energy(i-1,next_y-1) energy(i-1,next_y) energy(i-1,next_y+1)]);
-            disp([energy(i-1,next_y-1) energy(i-1,next_y) energy(i-1,next_y+1)])
             seam=[[i-1 next_y+I-2];seam];
             next_y=next_y+I-2;
         end
         
     end
     %disp(seam)
-    output = 0;
     %imshow(im);
     %hold on;
-    disp(seam)
-    plot(seam(:,1),seam(:,2),'ks')
+    a=seam(:,1);
+    b=seam(:,2);
+    a=a';
+    b=b';
+    %plot(b',a', 'r.');
+    
+    % create the return image without the seam
+    for i =1:x
+        row=im(i,:,:);
+        output=[output;row]; 
+    end
+    imshow(output)
     
 end
