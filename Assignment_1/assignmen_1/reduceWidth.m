@@ -4,16 +4,12 @@ function [output] = reduceWidth(im, numPixels)
     for z =1:numPixels
         output=[];
         im_gray=rgb2gray(im);
-        %imshow(im_gray)
         energy=energyfunc(im_gray); % get the energy gradient of the image
         %imshow(energy);
         %imagesc(energy)
-
         hold on;
         % loop throught the image
         [x,y]=size(energy);
-        imagesc(energy);
-        figure;
         energy=im2double(energy);
         for i= 2:x
             for j=1:y
@@ -29,7 +25,7 @@ function [output] = reduceWidth(im, numPixels)
                 end
             end
         end
-        %imagesc(energy)
+
         % find the smallest number at the bottom 
         min_value=min(energy(x,:));
         min_value_y=find(energy(x,:)==min_value);

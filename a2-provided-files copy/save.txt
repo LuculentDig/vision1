@@ -1,0 +1,100 @@
+function [textons] = createTextons(imStack, bank, k)
+    %initialize the sizes
+    n=length(imStack);
+    [m,m,d]=size(bank);
+    textons=zeros(k,d);
+    
+    % for each image, run each filter. All pixels from all images should
+    % have a vector of d features. Run clustering on all.
+    all_image_features=[];
+    for i=1:n
+        image=imStack{i};
+        d_features=[];
+        for j =1:d
+            filter=bank(:,:,j);
+            % run filter.
+            filter_result=imfilter(image,filter,'replicate');
+            d_features(:,:,j)=filter_result;
+        end
+        
+        % add this image d_features into the all_image_features. Reshape
+        % that to a row before adding.
+        [x,y,d]=size(d_features);
+        all_image_features=[all_image_features reshape(d_features,[1 x*y d])];
+    end
+    
+    % now all the d_dimenssionl features from all images are combined into
+    % an array. perform k-mean clustering.
+    [x,y,z]=size(all_image_features);
+    
+    % make a sample of the features pixles. every 100 pixels. 
+    sample_pixels=all_image_features(1,1:100:end,:);
+    [x,y,z]=size(sample_pixels);
+    % pick k random initial points as cluter centers. (indexes)
+    centroids_centers=randi([x y],1,k);
+    clusters=containers.Map();
+    centroids=[]; % initial centroid values
+    for i = 1:k
+        centroid=sample_pixels(x,centroids_centers(i),:);
+       % disp(size(centroid))
+        centroids=[centroids centroid];
+        clusters(num2str(centroids_centers(i)))=[];
+    end
+    
+    % began the dynamic programming. Assign each point to a cluster base on
+    % the dist. Then use the average of each feature of the cluster as the
+    % new cluster center. terminate if new cluster is the same as old
+    % clusters.
+    while(1)
+        for i=1:y
+            point=sample_pixels(1,i,:);
+            point=reshape(point,[1 d 1]);
+            % check distance to each centroid
+
+            min_distance=intmax;
+            min_dis_cluster=centroids_centers(1);
+            for c=1:k
+               centroid_center=centroids_centers(c);
+               %disp(centroid_center);
+               centroid=sample_pixels(1,centroid_center,:);
+               centroid=reshape(centroid,[1,d,1]);
+               distance=dist2(centroid,point);
+               if(distance<min_distance)
+                   min_dis_cluster=centroid_center;
+                   min_distance=distance;
+               end
+
+            end
+
+            % find the closest cluster
+            point=reshape(point,[1 1 d]);
+            clusters(num2str(min_dis_cluster))=[clusters(num2str(min_dis_cluster)) point];
+        end
+
+        % recompute the centroid centers. And run again.
+        new_cenrtoids=[];
+        keys=clusters.keys();
+        for i=1:k
+            key=cell2mat(keys(i));
+            cluster=clusters(key);
+            [x,y,z]=size(cluster);
+            mean=sum(cluster)/y;
+            new_cenrtoids=[new_cenrtoids mean];
+        end
+        
+        % check if new cluster is the same as old clusters. compare each
+        % pair of cluster centroid values( old and new) centroids and
+        % new_centroid_centers
+        disp(isequal(centroids,new_cenrtoids))
+        if(isequal(centroids,new_cenrtoids)==0)
+            centroids=new_cenrtoids
+        else
+            break
+        end
+        
+       
+   end
+    
+    
+    
+end

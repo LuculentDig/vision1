@@ -1,19 +1,17 @@
-function [output] = reduceWidth(im, numPixels)
+function [output] = increaseWidth2(im, numPixels)
     %imshow(im);
     %hold on;
+    original=im;
+    seams=[];
     for z =1:numPixels
         output=[];
         im_gray=rgb2gray(im);
-        %imshow(im_gray)
-        energy=energyfunc(im_gray); % get the energy gradient of the image
+        energy=energyfunc(im_gray);
         %imshow(energy);
         %imagesc(energy)
-
         hold on;
         % loop throught the image
         [x,y]=size(energy);
-        imagesc(energy);
-        figure;
         energy=im2double(energy);
         for i= 2:x
             for j=1:y
@@ -29,12 +27,10 @@ function [output] = reduceWidth(im, numPixels)
                 end
             end
         end
-        %imagesc(energy)
+
         % find the smallest number at the bottom 
         min_value=min(energy(x,:));
         min_value_y=find(energy(x,:)==min_value);
-        
-        
         % trace back up for the seam
         next_x=x;
         next_y=min_value_y(1);
@@ -57,20 +53,27 @@ function [output] = reduceWidth(im, numPixels)
         end
         %disp(seam)
         %imshow(im);
+        seams=[seams;seam]
         hold on;
         a=seam(:,1);
         b=seam(:,2);
         a=a';
         b=b';
-        %plot(b',a', 'r.'); This will display the seam on the image.
+        %plot(b',a', 'r.');
         % create the return image without the seam
         for i =1:x
             row=im(i,:,:);
+            %row=[row(:,1:seam(i,2),:) im(i,seam(i,2),:) row(:,seam(i,2)+1:end,:)];
             row(:,seam(i,2),:)=[];
             output=[output;row]; 
         end
-        % change the original image so we can choose a different seam if
-        % needed. 
         im=output;
     end
+    
+    % adding seams in the order of removing. 
+    [sx sy]=size(seams);
+    for i =1:x
+        row=im(i,:,:)
+    end
+    
 end

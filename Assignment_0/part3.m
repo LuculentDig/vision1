@@ -35,3 +35,4 @@ result=Q2e(im);
 imshow(result);
 title('subtract random value');
 
+
